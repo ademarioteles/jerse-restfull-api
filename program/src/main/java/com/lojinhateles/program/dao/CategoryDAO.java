@@ -20,18 +20,6 @@ public class CategoryDAO implements ObjectService<Category> {
 	}
 
 	@Override
-	public Category getObject(Category object) {
-		Category category = this.getById(object.getId());
-		if (category != null) {
-			if (object.equals(category)) {
-				return category;
-			}
-		}
-		return null;
-
-	}
-
-	@Override
 	public Category getById(Integer id) {
 
 		Category category = connection.find(Category.class, id);

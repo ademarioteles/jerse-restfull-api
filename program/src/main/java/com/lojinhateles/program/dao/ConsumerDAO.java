@@ -18,19 +18,7 @@ public class ConsumerDAO implements ObjectService<Consumer> {
 		List<Consumer> list = query.getResultList();
 		return list;
 	}
-
-	@Override
-	public Consumer getObject(Consumer object) {
-		Consumer consumer = this.getById(object.getId());
-		if (consumer != null) {
-			if (object.equals(consumer)) {
-				return consumer;
-			}
-		}
-		return null;
-
-	}
-
+	
 	@Override
 	public Consumer getById(Integer id) {
 

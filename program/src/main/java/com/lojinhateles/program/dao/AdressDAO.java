@@ -18,19 +18,7 @@ public class AdressDAO implements ObjectService<Adress> {
 		List<Adress> list = query.getResultList();
 		return list;
 	}
-
-	@Override
-	public Adress getObject(Adress object) {
-		Adress adress = this.getById(object.getCep());
-		if (adress != null) {
-			if (object.equals(adress)) {
-				return adress;
-			}
-		}
-		return null;
-
-	}
-
+	
 	@Override
 	public Adress getById(Integer id) {
 

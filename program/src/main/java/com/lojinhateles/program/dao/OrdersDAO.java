@@ -20,18 +20,6 @@ public class OrdersDAO implements ObjectService<Orders> {
 	}
 
 	@Override
-	public Orders getObject(Orders object) {
-		Orders orders = this.getById(object.getId());
-		if (orders != null) {
-			if (object.equals(orders)) {
-				return orders;
-			}
-		}
-		return null;
-
-	}
-
-	@Override
 	public Orders getById(Integer id) {
 
 		Orders orders = connection.find(Orders.class, id);

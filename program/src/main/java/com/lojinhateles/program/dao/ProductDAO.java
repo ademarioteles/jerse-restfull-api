@@ -18,19 +18,7 @@ public class ProductDAO implements ObjectService<Product> {
 		List<Product> list = query.getResultList();
 		return list;
 	}
-
-	@Override
-	public Product getObject(Product object) {
-		Product product = this.getById(object.getId());
-		if (product != null) {
-			if (object.equals(product)) {
-				return product;
-			}
-		}
-		return null;
-
-	}
-
+	
 	@Override
 	public Product getById(Integer id) {
 
