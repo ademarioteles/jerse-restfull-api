@@ -33,7 +33,6 @@ public class OrdersResource {
 		List<Orders> allOrders;
 		GenericEntity<List<Orders>> entity;
 		try {
-
 			allOrders = getOrdersDAO.getAll();
 			if(allOrders.size() <= 0) {
 				return Response.status(404).entity("Not Found").build();
@@ -126,20 +125,11 @@ public class OrdersResource {
 	@Path("/save")
 	public Response save(Orders order) {
 		try {
-			if(getOrdersDAO.getAll().size() <= 0 && order.getId() == null) {
-				return Response.status(405).entity("Id Required").build();
-			}
-			if (getOrdersDAO.getById(order.getId()) != null) {
-				return Response.status(405).entity("Not Authorized").build();
-			}
-		
+			order.setId(null);
 			getOrdersDAO.save(order);
 
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
-
-		} catch (RuntimeException runtime) {
-			return Response.status(500).entity("Not Working!").build();
 
 		}
 

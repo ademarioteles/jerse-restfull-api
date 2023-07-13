@@ -6,6 +6,11 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 	version="2.1">
 	<persistence-unit name="lojinhajpa2023"
 		transaction-type="RESOURCE_LOCAL">
+		<class>com.lojinhateles.program.model.Category</class>
+		<class>com.lojinhateles.program.model.Adress</class>
+		<class>com.lojinhateles.program.model.Orders</class>
+		<class>com.lojinhateles.program.model.Product</class>
+		<class>com.lojinhateles.program.model.Consumer</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:mysql://localhost:3306/lojinha?useSSL=FALSE&amp;serverTimezone=UTC" />

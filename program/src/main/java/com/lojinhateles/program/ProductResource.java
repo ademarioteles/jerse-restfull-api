@@ -125,12 +125,7 @@ public class ProductResource {
 	@Path("/save")
 	public Response save(Product prod) {
 		try {
-			if(getProductDAO.getAll().size() <= 0 && prod.getId() == null) {
-				return Response.status(405).entity("Id Required").build();
-			}
-			if (getProductDAO.getById(prod.getId()) != null) {
-				return Response.status(405).entity("Not Authorized").build();
-			}
+			prod.setId(null);
 		
 			getProductDAO.save(prod);
 

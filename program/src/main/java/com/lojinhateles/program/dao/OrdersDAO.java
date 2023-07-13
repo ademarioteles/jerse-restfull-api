@@ -21,7 +21,6 @@ public class OrdersDAO implements ObjectService<Orders> {
 
 	@Override
 	public Orders getById(Integer id) {
-
 		Orders orders = connection.find(Orders.class, id);
 		if (orders != null) {
 			return orders;
@@ -34,6 +33,7 @@ public class OrdersDAO implements ObjectService<Orders> {
 	public void save(Orders object) {
 		if (object != null) {
 			connection.getTransaction().begin();
+			object.setProducts(object.getProducts());
 			connection.merge(object);
 			connection.getTransaction().commit();
 		} else {

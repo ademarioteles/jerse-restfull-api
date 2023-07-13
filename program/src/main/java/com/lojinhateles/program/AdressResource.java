@@ -123,13 +123,6 @@ public class AdressResource {
 	@Path("/save")
 	public Response save(Adress adress) {
 		try {
-			if (getAdressDAO.getAll().size() <= 0 && adress.getCep() == null) {
-				return Response.status(405).entity("Id Required").build();
-			}
-			if (getAdressDAO.getById(adress.getCep()) != null) {
-				return Response.status(405).entity("Not Authorized").build();
-			}
-
 			getAdressDAO.save(adress);
 
 		} catch (NullPointerException runtime) {

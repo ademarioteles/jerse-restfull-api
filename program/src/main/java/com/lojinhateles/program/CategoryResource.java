@@ -128,23 +128,16 @@ public class CategoryResource {
 	@Path("/save")
 	public Response save(Category category) {
 		try {
-			if(getCategoryDAO.getAll().size() <= 0 && category.getId() == null) {
-				return Response.status(405).entity("Id Required").build();
-			}
-			if (getCategoryDAO.getById(category.getId()) != null) {
-				return Response.status(405).entity("Not Authorized").build();
-			}
-		
+			category.setId(null);
 			getCategoryDAO.save(category);
 
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
 
-		} catch (RuntimeException runtime) {
+		}catch(RuntimeException runtime) {
 			return Response.status(500).entity("Not Working!").build();
 
 		}
-
 		return Response.status(200).entity("Its Work!").build();
 	}
 	@Produces(MediaType.TEXT_PLAIN)

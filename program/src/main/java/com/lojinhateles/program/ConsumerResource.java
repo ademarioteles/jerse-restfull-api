@@ -127,16 +127,11 @@ public class ConsumerResource {
 	@Produces({ MediaType.TEXT_PLAIN })
 	@POST
 	@Path("/save")
-	public Response save(Consumer prod) {
+	public Response save(Consumer cons) {
 		try {
-			if(getConsumerDAO.getAll().size() <= 0 && prod.getId() == null) {
-				return Response.status(405).entity("Id Required").build();
-			}
-			if (getConsumerDAO.getById(prod.getId()) != null) {
-				return Response.status(405).entity("Not Authorized").build();
-			}
+			cons.setId(null);
 		
-			getConsumerDAO.save(prod);
+			getConsumerDAO.save(cons);
 
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
