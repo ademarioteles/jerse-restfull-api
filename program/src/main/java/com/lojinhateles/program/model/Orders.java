@@ -1,14 +1,15 @@
 package com.lojinhateles.program.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lojinhateles.program.enums.SituacionOrder;
 
 @XmlRootElement
@@ -27,7 +35,7 @@ import com.lojinhateles.program.enums.SituacionOrder;
 public class Orders implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -41,22 +49,23 @@ public class Orders implements Serializable {
 	private SituacionOrder situation;
 
 	private Double total;
-	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "product_orders", joinColumns = {@JoinColumn(name = "orders_id")}, inverseJoinColumns = {@JoinColumn(name = "product_id")})
-	private Set<Product> product = new HashSet<Product>();
-	
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "product_orders", joinColumns = { @JoinColumn(name = "product_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "orders_id") })
+	private List<Product> product = new ArrayList<Product>();
+
 	public Orders() {
 
 	}
 
-	public Orders(Integer id, Set<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
+	public Orders(Integer id, List<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
 		this.id = id;
 		this.product = product;
 		this.consumer = consumer;
 		this.situation = situation;
 		this.total = total;
-		
+
 	}
 
 	public Integer getId() {
@@ -67,11 +76,11 @@ public class Orders implements Serializable {
 		this.id = id;
 	}
 
-	public Set<Product> getProducts() {
+
+	public List<Product> getProducts() {	
 		return product;
 	}
-
-	public void setProducts(Set<Product> products) {
+	public void setProducts(List<Product> products) {
 		this.product = products;
 	}
 
@@ -150,7 +159,5 @@ public class Orders implements Serializable {
 		return "Orders [id=" + id + ", consumer=" + consumer + ", situation=" + situation + ", total=" + total
 				+ ", product=" + product + "]";
 	}
-
-
 
 }

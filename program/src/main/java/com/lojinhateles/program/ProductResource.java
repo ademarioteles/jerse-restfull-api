@@ -1,6 +1,8 @@
 package com.lojinhateles.program;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,6 +19,9 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.internal.guava.Lists;
 
 import com.lojinhateles.program.dao.ProductDAO;
+import com.lojinhateles.program.dto.OrdersDTO;
+import com.lojinhateles.program.dto.ProductDTO;
+import com.lojinhateles.program.factory.ConnectionFactory;
 import com.lojinhateles.program.model.Product;
 import com.lojinhateles.program.service.ObjectService;
 
@@ -29,23 +34,30 @@ public class ProductResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/")
 	public Response getAll() {
-		List<Product> allProduct;
-		GenericEntity<List<Product>> entity;
+		List<Product> allProduct = new ArrayList<Product>();
+		GenericEntity<List<ProductDTO>> entity;
 		try {
 
 			allProduct = getProductDAO.getAll();
-			if(allProduct.size() <= 0) {
+
+			List<ProductDTO> newProductDto = allProduct.stream().map(x -> new ProductDTO(x))
+					.collect(Collectors.toList());
+
+			if (allProduct.size() <= 0) {
 				return Response.status(404).entity("Not Found").build();
 			}
-			entity = new GenericEntity<List<Product>>(Lists.newArrayList(allProduct)) {
+			entity = new GenericEntity<List<ProductDTO>>(Lists.newArrayList(newProductDto)) {
 			};
 			return Response.ok(entity).build();
 		} catch (NullPointerException nulls) {
 			Response.status(404).entity("Not Found").build();
+		} finally {
+			ConnectionFactory.close();
 		}
 		return Response.status(500).entity("Not Working!").build();
 
 	}
+
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -57,7 +69,7 @@ public class ProductResource {
 				return Response.status(404).entity("Not Found").build();
 			}
 			getProductDAO.update(prod);
-			
+
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
 
@@ -70,20 +82,24 @@ public class ProductResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}")
+	@Path("{id}")
 	public Response getById(@PathParam("id") int id) {
+		ProductDTO prodDTO;
 		try {
 			product = getProductDAO.getById(id);
+			prodDTO = new ProductDTO(product);
 			if (product == null) {
-
 				return Response.status(404).entity("Not Found").build();
-
 			}
+		} catch (NullPointerException nulls) {
+			return Response.status(404
+					).entity("Not Found!").build();
+
 		} catch (RuntimeException runtime) {
 			return Response.status(500).entity("Not Working!").build();
 
 		}
-		return Response.status(200).entity(product).build();
+		return Response.status(200).entity(prodDTO).build();
 	}
 
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -126,7 +142,7 @@ public class ProductResource {
 	public Response save(Product prod) {
 		try {
 			prod.setId(null);
-		
+
 			getProductDAO.save(prod);
 
 		} catch (NullPointerException nulls) {
@@ -139,6 +155,7 @@ public class ProductResource {
 
 		return Response.status(200).entity("Its Work!").build();
 	}
+
 	@Produces(MediaType.TEXT_PLAIN)
 	@GET
 	@Path("/total")

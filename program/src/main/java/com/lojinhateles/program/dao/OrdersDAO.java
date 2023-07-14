@@ -1,12 +1,18 @@
 package com.lojinhateles.program.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.lojinhateles.program.dto.OrdersDTO;
+import com.lojinhateles.program.enums.SituacionOrder;
 import com.lojinhateles.program.factory.ConnectionFactory;
+import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.model.Orders;
+import com.lojinhateles.program.model.Product;
 import com.lojinhateles.program.service.ObjectService;
 
 public class OrdersDAO implements ObjectService<Orders> {
@@ -31,14 +37,9 @@ public class OrdersDAO implements ObjectService<Orders> {
 
 	@Override
 	public void save(Orders object) {
-		if (object != null) {
-			connection.getTransaction().begin();
-			object.setProducts(object.getProducts());
-			connection.merge(object);
-			connection.getTransaction().commit();
-		} else {
-			throw new RuntimeException("Not Working");
-		}
+	
+	
+	
 	}
 
 	@Override

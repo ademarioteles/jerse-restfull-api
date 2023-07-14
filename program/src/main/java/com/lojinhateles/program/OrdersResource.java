@@ -1,8 +1,9 @@
 package com.lojinhateles.program;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.json.stream.JsonParsingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,7 +19,12 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.internal.guava.Lists;
 
 import com.lojinhateles.program.dao.OrdersDAO;
+import com.lojinhateles.program.dto.OrdersDTO;
+import com.lojinhateles.program.enums.SituacionOrder;
+import com.lojinhateles.program.factory.ConnectionFactory;
+import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.model.Orders;
+import com.lojinhateles.program.model.Product;
 import com.lojinhateles.program.service.ObjectService;
 
 @Path("/orders")
@@ -30,22 +36,29 @@ public class OrdersResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/")
 	public Response getAll() {
-		List<Orders> allOrders;
-		GenericEntity<List<Orders>> entity;
+
+		GenericEntity<List<OrdersDTO>> entity;
+		List<Orders> allOrders = new ArrayList<Orders>();
 		try {
 			allOrders = getOrdersDAO.getAll();
-			if(allOrders.size() <= 0) {
+			List<OrdersDTO> newOrderDto = allOrders.stream().map(x -> new OrdersDTO(x)).collect(Collectors.toList());
+
+			if (newOrderDto.size() <= 0) {
 				return Response.status(404).entity("Not Found").build();
 			}
-			entity = new GenericEntity<List<Orders>>(Lists.newArrayList(allOrders)) {
+
+			entity = new GenericEntity<List<OrdersDTO>>(Lists.newArrayList(newOrderDto)) {
 			};
 			return Response.ok(entity).build();
 		} catch (NullPointerException nulls) {
 			Response.status(404).entity("Not Found").build();
+		} finally {
+			ConnectionFactory.close();
 		}
 		return Response.status(500).entity("Not Working!").build();
 
 	}
+
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -57,9 +70,9 @@ public class OrdersResource {
 				return Response.status(404).entity("Not Found").build();
 			}
 			getOrdersDAO.update(prod);
-			
-		}catch(RuntimeException runtime) {
-			return Response.status(500).entity("Not Working!").build(); 
+
+		} catch (NullPointerException runtime) {
+			return Response.status(500).entity("Not Working!").build();
 		}
 		return Response.status(200).entity("Its Work!").build();
 	}
@@ -68,8 +81,10 @@ public class OrdersResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response getById(@PathParam("id") int id) {
+		OrdersDTO orderDTO;
 		try {
 			orders = getOrdersDAO.getById(id);
+			orderDTO = new OrdersDTO(orders);
 			if (orders == null) {
 
 				return Response.status(404).entity("Not Found").build();
@@ -82,7 +97,8 @@ public class OrdersResource {
 			return Response.status(500).entity("Not Working!").build();
 
 		}
-		return Response.status(200).entity(orders).build();
+
+		return Response.status(200).entity(orderDTO).build();
 	}
 
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -95,8 +111,7 @@ public class OrdersResource {
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
 
-		}
-		catch (RuntimeException runtime) {
+		} catch (RuntimeException runtime) {
 			return Response.status(500).entity("Not Working!").build();
 
 		}
@@ -125,8 +140,12 @@ public class OrdersResource {
 	@Path("/save")
 	public Response save(Orders order) {
 		try {
-			order.setId(null);
-			getOrdersDAO.save(order);
+			ConnectionFactory.getConection().getTransaction().begin();
+			List<Product> produto = new ArrayList<Product>();
+			produto.add(ConnectionFactory.getConection().find(Product.class,1));
+			produto.add(ConnectionFactory.getConection().find(Product.class,2));
+			ConnectionFactory.getConection().persist(new Orders(null,produto,ConnectionFactory.getConection().find(Consumer.class, 1),SituacionOrder.PENDENT,140.5));
+			ConnectionFactory.getConection().getTransaction().commit();
 
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
@@ -135,6 +154,7 @@ public class OrdersResource {
 
 		return Response.status(200).entity("Its Work!").build();
 	}
+
 	@Produces(MediaType.TEXT_PLAIN)
 	@GET
 	@Path("/total")
