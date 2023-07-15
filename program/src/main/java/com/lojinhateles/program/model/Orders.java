@@ -1,8 +1,9 @@
 package com.lojinhateles.program.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,13 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lojinhateles.program.enums.SituacionOrder;
 
 @XmlRootElement
@@ -50,16 +44,16 @@ public class Orders implements Serializable {
 
 	private Double total;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "product_orders", joinColumns = { @JoinColumn(name = "product_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "orders_id") })
-	private List<Product> product = new ArrayList<Product>();
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "product_orders", joinColumns = { @JoinColumn(name = "orders_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "product_id") })
+	private Set<Product> product = new HashSet<Product>();
 
 	public Orders() {
 
 	}
 
-	public Orders(Integer id, List<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
+	public Orders(Integer id, Set<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
 		this.id = id;
 		this.product = product;
 		this.consumer = consumer;
@@ -77,10 +71,10 @@ public class Orders implements Serializable {
 	}
 
 
-	public List<Product> getProducts() {	
+	public Set<Product> getProducts() {	
 		return product;
 	}
-	public void setProducts(List<Product> products) {
+	public void setProducts(Set<Product> products) {
 		this.product = products;
 	}
 

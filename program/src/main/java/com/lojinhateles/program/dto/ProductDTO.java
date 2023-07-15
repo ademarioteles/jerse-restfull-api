@@ -1,17 +1,9 @@
 package com.lojinhateles.program.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lojinhateles.program.model.Category;
 import com.lojinhateles.program.model.Orders;
 import com.lojinhateles.program.model.Product;
@@ -27,7 +19,7 @@ public class ProductDTO implements Serializable {
 	private String url;
 	private Integer stock;
 	private Double price;
-	private List<Orders> orders = new ArrayList<Orders>();
+	private Set<Orders> orders = new HashSet<Orders>();
 	private Category category;
 
 	public ProductDTO(Product prod){
@@ -85,11 +77,11 @@ public class ProductDTO implements Serializable {
 		this.price = price;
 	}
 
-	public List<Orders> getOrders() {
+	public Set<Orders> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Orders> orders) {
+	public void setOrders(Set<Orders> orders) {
 		this.orders = orders;
 	}
 

@@ -140,17 +140,12 @@ public class OrdersResource {
 	@Path("/save")
 	public Response save(Orders order) {
 		try {
-			ConnectionFactory.getConection().getTransaction().begin();
-			List<Product> produto = new ArrayList<Product>();
-			produto.add(ConnectionFactory.getConection().find(Product.class,1));
-			produto.add(ConnectionFactory.getConection().find(Product.class,2));
-			ConnectionFactory.getConection().persist(new Orders(null,produto,ConnectionFactory.getConection().find(Consumer.class, 1),SituacionOrder.PENDENT,140.5));
-			ConnectionFactory.getConection().getTransaction().commit();
-
+			order.setId(null);
+			getOrdersDAO.save(order);
 		} catch (NullPointerException nulls) {
 			return Response.status(404).entity("Not Found").build();
 
-		}
+		} 
 
 		return Response.status(200).entity("Its Work!").build();
 	}

@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import com.lojinhateles.program.dto.OrdersDTO;
 import com.lojinhateles.program.enums.SituacionOrder;
 import com.lojinhateles.program.factory.ConnectionFactory;
+import com.lojinhateles.program.model.Category;
 import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.model.Orders;
 import com.lojinhateles.program.model.Product;
@@ -37,9 +38,15 @@ public class OrdersDAO implements ObjectService<Orders> {
 
 	@Override
 	public void save(Orders object) {
-	
-	
-	
+		try {
+			connection.getTransaction().begin();		
+			connection.merge(object);
+			connection.getTransaction().commit();
+		} catch (RuntimeException runtime) {
+			connection.getTransaction().rollback();
+			runtime.printStackTrace();
+		}
+
 	}
 
 	@Override

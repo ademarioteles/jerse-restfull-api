@@ -1,8 +1,8 @@
 package com.lojinhateles.program.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,17 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @XmlRootElement
 @Entity
@@ -36,14 +29,14 @@ public class Product implements Serializable {
 	private String url;
 	private Integer stock;
 	private Double price;
-	@ManyToMany(mappedBy = "product", fetch = FetchType.EAGER)
-	private List<Orders> orders = new ArrayList<Orders>();
+	@ManyToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	private Set<Orders> orders = new HashSet<Orders>();
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
 	public Product(Integer id, String name, String url, Integer stock, Double price, Category category,
-			List<Orders> orders) {
+			Set<Orders> orders) {
 		this.id = id;
 		this.name = name;
 		this.url = url;
@@ -104,11 +97,11 @@ public class Product implements Serializable {
 		this.url = url;
 	}
 
-	public List<Orders> getOrders() {
+	public Set<Orders> getOrders() {
 		return orders;
 	}
 	
-	public void setOrders(List<Orders> orders) {
+	public void setOrders(Set<Orders> orders) {
 		this.orders = orders;
 	}
 	
