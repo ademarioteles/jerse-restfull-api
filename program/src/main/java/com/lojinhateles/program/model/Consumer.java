@@ -28,7 +28,7 @@ public class Consumer implements Serializable {
 	private String password;
 	private Date dateCreate;
 	private String phone;
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "adress_cep")
 	private Adress adress;
 

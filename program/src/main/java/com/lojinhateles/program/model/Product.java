@@ -1,7 +1,8 @@
 package com.lojinhateles.program.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,13 +31,13 @@ public class Product implements Serializable {
 	private Integer stock;
 	private Double price;
 	@ManyToMany(mappedBy = "product", fetch = FetchType.LAZY)
-	private Set<Orders> orders = new HashSet<Orders>();
+	private List<Orders> orders = new ArrayList<Orders>();
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
 	public Product(Integer id, String name, String url, Integer stock, Double price, Category category,
-			Set<Orders> orders) {
+			List<Orders> orders) {
 		this.id = id;
 		this.name = name;
 		this.url = url;
@@ -97,11 +98,11 @@ public class Product implements Serializable {
 		this.url = url;
 	}
 
-	public Set<Orders> getOrders() {
+	public List<Orders> getOrders() {
 		return orders;
 	}
 	
-	public void setOrders(Set<Orders> orders) {
+	public void setOrders(List<Orders> orders) {
 		this.orders = orders;
 	}
 	

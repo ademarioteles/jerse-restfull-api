@@ -1,7 +1,8 @@
 package com.lojinhateles.program.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.lojinhateles.program.enums.SituacionOrder;
@@ -19,25 +20,18 @@ public class OrdersDTO implements Serializable {
 	private Consumer consumer;
 	private SituacionOrder situation;
 	private Double total;
-	private Set<Product> product = new HashSet<Product>();
+	private List<Product> product = new ArrayList<Product>();
 
 	public OrdersDTO() {
 	}
 
 	public OrdersDTO(Orders orde) {
+		this.id = orde.getId();
 		this.consumer = orde.getConsumer();
 		this.situation = orde.getSituation();
 		this.total = orde.getTotal();
 		orde.getProducts().forEach(x -> x.getOrders().clear());
 		this.product = orde.getProducts();
-	}
-
-	public Orders build(Orders order) {
-		order = new Orders();
-		order.setId(order.getId());
-		order.setSituation(order.getSituation());
-		order.setTotal(order.getTotal());
-		return order;
 	}
 
 	@Override
@@ -78,11 +72,11 @@ public class OrdersDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Set<Product> getProduct() {
+	public List<Product> getProduct() {
 		return product;
 	}
 
-	public void setProduct(Set<Product> product) {
+	public void setProduct(List<Product> product) {
 		this.product = product;
 	}
 

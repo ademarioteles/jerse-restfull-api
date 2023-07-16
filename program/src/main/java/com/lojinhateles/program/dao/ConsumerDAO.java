@@ -18,21 +18,21 @@ public class ConsumerDAO implements ObjectService<Consumer> {
 		List<Consumer> list = query.getResultList();
 		return list;
 	}
-	
+
 	@Override
 	public Consumer getById(Integer id) {
 
 		Consumer consumer = connection.find(Consumer.class, id);
-		if (consumer != null) {
-			return consumer;
+		if (consumer == null) {
+			return null;
 		}
-		return null;
+		return consumer;
 
 	}
 
 	@Override
 	public void save(Consumer object) {
-		if (object != null) {
+		if (object != null && this.getById(object.getId()) == null) {
 			connection.getTransaction().begin();
 			connection.merge(object);
 			connection.getTransaction().commit();

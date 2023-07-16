@@ -23,16 +23,16 @@ public class AdressDAO implements ObjectService<Adress> {
 	public Adress getById(Integer id) {
 
 		Adress adress = connection.find(Adress.class, id);
-		if (adress != null) {
-			return adress;
+		if (adress == null) {
+			return null;
 		}
-		return null;
+		return adress;
 
 	}
 
 	@Override
 	public void save(Adress object) {
-		if (object != null) {
+		if (object != null && this.getById(object.getCep()) == null) {
 			connection.getTransaction().begin();
 			connection.merge(object);
 			connection.getTransaction().commit();

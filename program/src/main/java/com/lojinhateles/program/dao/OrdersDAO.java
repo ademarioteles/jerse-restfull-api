@@ -22,6 +22,7 @@ public class OrdersDAO implements ObjectService<Orders> {
 	@Override
 	public List<Orders> getAll() {
 		Query query = connection.createQuery("Select c from Orders c");
+
 		List<Orders> list = query.getResultList();
 		return list;
 	}
@@ -29,20 +30,20 @@ public class OrdersDAO implements ObjectService<Orders> {
 	@Override
 	public Orders getById(Integer id) {
 		Orders orders = connection.find(Orders.class, id);
-		if (orders != null) {
-			return orders;
+		if (orders == null) {
+			return null;
 		}
-		return null;
+		return orders;
 
 	}
 
 	@Override
 	public void save(Orders object) {
-		try {
-			connection.getTransaction().begin();		
+		if (object != null && this.getById(object.getId()) == null) {
+			connection.getTransaction().begin();
 			connection.merge(object);
 			connection.getTransaction().commit();
-		} catch (RuntimeException runtime) {
+		} else {
 			connection.getTransaction().rollback();
 			runtime.printStackTrace();
 		}

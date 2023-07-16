@@ -18,21 +18,21 @@ public class ProductDAO implements ObjectService<Product> {
 		List<Product> list = query.getResultList();
 		return list;
 	}
-	
+
 	@Override
 	public Product getById(Integer id) {
 
 		Product product = connection.find(Product.class, id);
-		if (product != null) {
-			return product;
+		if (product == null) {
+			return null;
 		}
-		return null;
+		return product;
 
 	}
 
 	@Override
 	public void save(Product object) {
-		if (object != null) {
+		if (object != null && this.getById(object.getId()) == null) {
 			connection.getTransaction().begin();
 			connection.merge(object);
 			connection.getTransaction().commit();

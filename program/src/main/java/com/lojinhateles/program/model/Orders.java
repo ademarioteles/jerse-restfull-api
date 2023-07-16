@@ -1,7 +1,7 @@
 package com.lojinhateles.program.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -47,13 +47,13 @@ public class Orders implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "product_orders", joinColumns = { @JoinColumn(name = "orders_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "product_id") })
-	private Set<Product> product = new HashSet<Product>();
+	private List<Product> product = new ArrayList<Product>();
 
 	public Orders() {
 
 	}
 
-	public Orders(Integer id, Set<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
+	public Orders(Integer id, List<Product> product, Consumer consumer, SituacionOrder situation, Double total) {
 		this.id = id;
 		this.product = product;
 		this.consumer = consumer;
@@ -71,10 +71,10 @@ public class Orders implements Serializable {
 	}
 
 
-	public Set<Product> getProducts() {	
+	public List<Product> getProducts() {	
 		return product;
 	}
-	public void setProducts(Set<Product> products) {
+	public void setProducts(List<Product> products) {
 		this.product = products;
 	}
 

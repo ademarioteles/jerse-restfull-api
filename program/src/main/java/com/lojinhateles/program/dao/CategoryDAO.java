@@ -23,16 +23,16 @@ public class CategoryDAO implements ObjectService<Category> {
 	public Category getById(Integer id) {
 
 		Category category = connection.find(Category.class, id);
-		if (category != null) {
-			return category;
+		if (category == null) {
+			return null;
 		}
-		return null;
+		return category;
 
 	}
 
 	@Override
 	public void save(Category object) {
-		if (object != null) {
+		if (object != null && this.getById(object.getId()) == null) {
 			connection.getTransaction().begin();
 			connection.merge(object);
 			connection.getTransaction().commit();

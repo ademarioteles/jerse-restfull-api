@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,6 +22,7 @@ import org.glassfish.jersey.internal.guava.Lists;
 import com.lojinhateles.program.dao.OrdersDAO;
 import com.lojinhateles.program.dto.OrdersDTO;
 import com.lojinhateles.program.enums.SituacionOrder;
+import com.lojinhateles.program.exception.JsonArgumentException;
 import com.lojinhateles.program.factory.ConnectionFactory;
 import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.model.Orders;
@@ -38,20 +40,22 @@ public class OrdersResource {
 	public Response getAll() {
 
 		GenericEntity<List<OrdersDTO>> entity;
+		List<OrdersDTO> newOrderDto;
 		List<Orders> allOrders = new ArrayList<Orders>();
 		try {
 			allOrders = getOrdersDAO.getAll();
-			List<OrdersDTO> newOrderDto = allOrders.stream().map(x -> new OrdersDTO(x)).collect(Collectors.toList());
+			newOrderDto = allOrders.stream().map(x -> new OrdersDTO(x)).collect(Collectors.toList());
 
 			if (newOrderDto.size() <= 0) {
 				return Response.status(404).entity("Not Found").build();
 			}
-
+			
 			entity = new GenericEntity<List<OrdersDTO>>(Lists.newArrayList(newOrderDto)) {
 			};
 			return Response.ok(entity).build();
-		} catch (NullPointerException nulls) {
-			Response.status(404).entity("Not Found").build();
+			
+		} catch (Exception exception) {
+			Response.status(404).entity("Not Working").build();
 		} finally {
 			ConnectionFactory.close();
 		}

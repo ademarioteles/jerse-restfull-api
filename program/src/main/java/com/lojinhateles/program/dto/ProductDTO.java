@@ -1,7 +1,8 @@
 package com.lojinhateles.program.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.lojinhateles.program.model.Category;
@@ -19,7 +20,7 @@ public class ProductDTO implements Serializable {
 	private String url;
 	private Integer stock;
 	private Double price;
-	private Set<Orders> orders = new HashSet<Orders>();
+	private List<Orders> orders = new ArrayList<Orders>();
 	private Category category;
 
 	public ProductDTO(Product prod){
@@ -77,11 +78,11 @@ public class ProductDTO implements Serializable {
 		this.price = price;
 	}
 
-	public Set<Orders> getOrders() {
+	public List<Orders> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(Set<Orders> orders) {
+	public void setOrders(List<Orders> orders) {
 		this.orders = orders;
 	}
 
