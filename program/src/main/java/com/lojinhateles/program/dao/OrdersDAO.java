@@ -38,14 +38,13 @@ public class OrdersDAO implements ObjectService<Orders> {
 	}
 
 	@Override
-	public void save(Orders object) {
-		if (object != null && this.getById(object.getId()) == null) {
+	public void save(Orders object) {	
+		if (object != null) {
 			connection.getTransaction().begin();
-			connection.merge(object);
+			connection.persist(object);
 			connection.getTransaction().commit();
 		} else {
 			connection.getTransaction().rollback();
-			runtime.printStackTrace();
 		}
 
 	}

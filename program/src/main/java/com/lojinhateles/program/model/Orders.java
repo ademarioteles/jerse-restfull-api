@@ -61,7 +61,7 @@ public class Orders implements Serializable {
 		this.total = total;
 
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
