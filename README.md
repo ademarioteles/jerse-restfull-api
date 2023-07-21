@@ -1,4 +1,4 @@
-# API RESTFULL JERSEY FRAMEWORK
+# Api RESTFULL através do Jersey [Em desenvolvimento]
 
 Api desenvolvida na linguagem de programação java e com auxílio do Jersey, Jpa, Apache Tomcat e Hibernate. Essa api possui os seguintes endpoints:
 
