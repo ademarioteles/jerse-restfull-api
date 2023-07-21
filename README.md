@@ -2,6 +2,10 @@
 
 Api desenvolvida na linguagem de programação java e com auxílio do Jersey, Jpa, Apache Tomcat e Hibernate. Essa api possui os seguintes endpoints:
 
+As entidades estão organizadas da seguinte forma:
+
+![Database](base.png)
+
 1- Adress
 
 Acesso: http://localhost:8080/api/adress
@@ -80,9 +84,7 @@ Acesso: http://localhost:8080/api/consumer
     "phone": "(31)9999-4881"
 }
 ```
-E essas entidades estão organizadas da seguinte forma:
 
-![Database](database.png)
 
 ### 📝 Jersey
 ```
