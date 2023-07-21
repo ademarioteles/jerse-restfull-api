@@ -1,8 +1,8 @@
 package com.lojinhateles.program;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.json.stream.JsonParsingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.internal.guava.Lists;
 
 import com.lojinhateles.program.dao.ConsumerDAO;
+import com.lojinhateles.program.dto.ConsumerDTO;
 import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.service.ObjectService;
 
@@ -31,14 +32,16 @@ public class ConsumerResource {
 	@Path("/")
 	public Response getAll() {
 		List<Consumer> allConsumer;
-		GenericEntity<List<Consumer>> entity;
+		List<ConsumerDTO> allConsumerDTO;
+		GenericEntity<List<ConsumerDTO>> entity;
 		try {
 
 			allConsumer = getConsumerDAO.getAll();
+			allConsumerDTO = allConsumer.stream().map(x-> new ConsumerDTO(x)).collect(Collectors.toList());
 			if(allConsumer.size() <= 0) {
 				return Response.status(404).entity("Not Found").build();
 			}
-			entity = new GenericEntity<List<Consumer>>(Lists.newArrayList(allConsumer)) {
+			entity = new GenericEntity<List<ConsumerDTO>>(Lists.newArrayList(allConsumerDTO)) {
 			};
 			return Response.ok(entity).build();
 		} catch (NullPointerException nulls) {

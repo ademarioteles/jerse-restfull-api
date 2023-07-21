@@ -3,7 +3,6 @@ package com.lojinhateles.program.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.lojinhateles.program.enums.SituacionOrder;
 import com.lojinhateles.program.model.Consumer;
@@ -27,6 +26,7 @@ public class OrdersDTO implements Serializable {
 
 	public OrdersDTO(Orders orde) {
 		this.id = orde.getId();
+		orde.getConsumer().getOrders().clear();
 		this.consumer = orde.getConsumer();
 		this.situation = orde.getSituation();
 		this.total = orde.getTotal();
@@ -34,11 +34,7 @@ public class OrdersDTO implements Serializable {
 		this.product = orde.getProducts();
 	}
 
-	@Override
-	public String toString() {
-		return "OrdersDTO [id=" + id + ", consumer=" + consumer + ", situation=" + situation + ", total=" + total
-				+ ", produtos=" + product + "]";
-	}
+
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -78,6 +74,12 @@ public class OrdersDTO implements Serializable {
 
 	public void setProduct(List<Product> product) {
 		this.product = product;
+	}
+
+	@Override
+	public String toString() {
+		return "OrdersDTO [id=" + id + ", consumer=" + consumer + ", situation=" + situation + ", total=" + total
+				+ ", product=" + product + "]";
 	}
 
 }

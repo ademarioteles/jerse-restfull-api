@@ -10,11 +10,9 @@ public class ConnectionFactory {
 	private static EntityManager manager;
 
 	public static EntityManager getConection() {
-		if (manager == null && factory == null) {
-			factory = Persistence.createEntityManagerFactory("lojinhajpa2023");
-			manager = factory.createEntityManager();
-			return manager;
-		}
+
+		factory = Persistence.createEntityManagerFactory("lojinhajpa2023");
+		manager = factory.createEntityManager();
 		return manager;
 
 	}

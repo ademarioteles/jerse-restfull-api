@@ -49,8 +49,8 @@ public class OrdersResource {
 			};
 			return Response.ok(entity).build();
 			
-		} catch (Exception exception) {
-			Response.status(404).entity("Not Working").build();
+		} catch (RuntimeException runtime) {
+			runtime.printStackTrace();
 		} finally {
 			ConnectionFactory.close();
 		}

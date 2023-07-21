@@ -1,19 +1,12 @@
 package com.lojinhateles.program.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.lojinhateles.program.dto.OrdersDTO;
-import com.lojinhateles.program.enums.SituacionOrder;
 import com.lojinhateles.program.factory.ConnectionFactory;
-import com.lojinhateles.program.model.Category;
-import com.lojinhateles.program.model.Consumer;
 import com.lojinhateles.program.model.Orders;
-import com.lojinhateles.program.model.Product;
 import com.lojinhateles.program.service.ObjectService;
 
 public class OrdersDAO implements ObjectService<Orders> {
@@ -21,7 +14,7 @@ public class OrdersDAO implements ObjectService<Orders> {
 
 	@Override
 	public List<Orders> getAll() {
-		Query query = connection.createQuery("Select c from Orders c");
+		Query query = connection.createQuery("FROM Orders");
 
 		List<Orders> list = query.getResultList();
 		return list;
@@ -41,6 +34,9 @@ public class OrdersDAO implements ObjectService<Orders> {
 	public void save(Orders object) {	
 		if (object != null) {
 			connection.getTransaction().begin();
+			object.getConsumer().setId(null);
+			object.getProducts().forEach(x -> x.setId(null));
+			object.getProducts().forEach(x-> x.getCategory().setId(null));
 			connection.persist(object);
 			connection.getTransaction().commit();
 		} else {

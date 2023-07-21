@@ -30,6 +30,7 @@ public class ProductDTO implements Serializable {
 		this.stock = prod.getStock();
 		this.price = prod.getPrice();
 		prod.getOrders().forEach(x->x.getProducts().clear());
+		prod.getOrders().forEach(x->x.getConsumer().getOrders().clear());
 		this.orders = prod.getOrders();
 		this.category = prod.getCategory();
 	}
@@ -93,12 +94,14 @@ public class ProductDTO implements Serializable {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ProductDTO [id=" + id + ", name=" + name + ", url=" + url + ", stock=" + stock + ", price=" + price
 				+ ", orders=" + orders + ", category=" + category + "]";
 	}
+	
+
 	
 	
 

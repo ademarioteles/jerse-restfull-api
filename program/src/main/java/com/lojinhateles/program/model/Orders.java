@@ -3,7 +3,6 @@ package com.lojinhateles.program.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,7 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -35,7 +34,7 @@ public class Orders implements Serializable {
 	@Column(name = "id")
 	private Integer id;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "consumer_id")
 	private Consumer consumer;
 
@@ -44,7 +43,7 @@ public class Orders implements Serializable {
 
 	private Double total;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "product_orders", joinColumns = { @JoinColumn(name = "orders_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "product_id") })
 	private List<Product> product = new ArrayList<Product>();

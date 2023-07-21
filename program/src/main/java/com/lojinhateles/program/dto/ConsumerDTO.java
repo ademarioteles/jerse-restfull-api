@@ -1,28 +1,17 @@
-package com.lojinhateles.program.model;
+package com.lojinhateles.program.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.lojinhateles.program.model.Adress;
+import com.lojinhateles.program.model.Consumer;
+import com.lojinhateles.program.model.Orders;
 
-@Entity
-@Table(name = "consumer")
-@XmlRootElement
-public class Consumer implements Serializable {
+public class ConsumerDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private String cpf;
@@ -30,27 +19,24 @@ public class Consumer implements Serializable {
 	private String password;
 	private Date dateCreate;
 	private String phone;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "adress_cep")
 	private Adress adress;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "consumer")
 	private List<Orders> orders;
 
-	public Consumer(Integer id, String name, String cpf, String email, String password, Date dateCreate, String phone,
-			Adress adress, List<Orders> orders) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.cpf = cpf;
-		this.email = email;
-		this.password = password;
-		this.dateCreate = dateCreate;
-		this.phone = phone;
-		this.adress = adress;
-		this.orders = orders;
+	public ConsumerDTO(Consumer consumer) {
+		this.id = consumer.getId();
+		this.name = consumer.getName();
+		this.cpf = consumer.getCpf();
+		this.email = consumer.getEmail();
+		this.password = consumer.getPassword();
+		this.dateCreate = consumer.getDateCreate();
+		this.phone = consumer.getPhone();
+		this.adress = consumer.getAdress();
+		consumer.getOrders().forEach(x->x.getProducts().forEach(y->y.getOrders().clear()));
+		consumer.getOrders().forEach(x->x.setConsumer(null));
+		this.orders = consumer.getOrders();
 	}
 
-	public Consumer() {
+	public ConsumerDTO() {
 
 	}
 
@@ -128,8 +114,10 @@ public class Consumer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Consumer [id=" + id + ", name=" + name + ", cpf=" + cpf + ", email=" + email + ", password=" + password
-				+ ", dateCreate=" + dateCreate + ", phone=" + phone + ", adress=" + adress + ", orders=" + orders + "]";
+		return "ConsumerDTO [id=" + id + ", name=" + name + ", cpf=" + cpf + ", email=" + email + ", password="
+				+ password + ", dateCreate=" + dateCreate + ", phone=" + phone + ", adress=" + adress + ", orders="
+				+ orders + "]";
 	}
-
+	
+	
 }

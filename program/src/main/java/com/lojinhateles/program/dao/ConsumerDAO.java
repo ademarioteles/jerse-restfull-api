@@ -14,7 +14,7 @@ public class ConsumerDAO implements ObjectService<Consumer> {
 
 	@Override
 	public List<Consumer> getAll() {
-		Query query = connection.createQuery("Select c from Consumer c");
+		Query query = connection.createQuery("FROM Consumer");
 		List<Consumer> list = query.getResultList();
 		return list;
 	}
